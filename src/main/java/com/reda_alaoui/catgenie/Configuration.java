@@ -14,15 +14,20 @@ public class Configuration {
 
   private static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
 
-  private final Properties properties;
+  private final String iftttWebhookKey;
 
   public Configuration(Properties properties) {
-    this.properties = properties;
+    iftttWebhookKey = properties.getProperty("ifttt.webhook.key");
+  }
+
+  public Configuration(String iftttWebhookKey) {
+    this.iftttWebhookKey = iftttWebhookKey;
   }
 
   public static Configuration readFromUserHome() {
     String userHome = System.getProperty("user.home");
-    Path propertiesPath = Paths.get(userHome).resolve("configuration.properties");
+    Path propertiesPath =
+        Paths.get(userHome).resolve(".catgenie").resolve("configuration.properties");
     LOG.info("Reading configuration from '{}'", propertiesPath);
 
     Properties properties = new Properties();
@@ -35,6 +40,6 @@ public class Configuration {
   }
 
   public String iftttWebhookKey() {
-    return properties.getProperty("ifttt.webhook.key");
+    return iftttWebhookKey;
   }
 }
