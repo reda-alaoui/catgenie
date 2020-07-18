@@ -38,8 +38,8 @@ public class Error2Webhook implements Error2Listener {
       return;
     }
     lastNotification = LocalDateTime.now();
-    LOG.info("Firing notification");
+    LOG.info("Firing error 2 notification");
     client.fireEvent("catgenie_error_2");
-    LOG.info("Fired notification");
+    LOG.info("Error 2 notification fired with success");
   }
 }
