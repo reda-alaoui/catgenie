@@ -32,7 +32,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>${slf4j.version}</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -45,6 +44,12 @@
       <groupId>com.github.axet</groupId>
       <artifactId>TarsosDSP</artifactId>
       <version>2.4-1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.6</version>
     </dependency>
 
     <dependency>

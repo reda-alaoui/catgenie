@@ -11,14 +11,14 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import org.junit.jupiter.api.Test;
 
 /** @author Réda Housni Alaoui */
-class CatgenieAudioStreamTest {
+class CatGenieAudioStreamTest {
 
   @Test
   public void test() throws IOException, UnsupportedAudioFileException {
     AtomicInteger numberOfErrorNotifications = new AtomicInteger();
     try (InputStream resourceStream = getClass().getResourceAsStream("/catgenie_error_2.wav")) {
       AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(resourceStream);
-      new CatgenieAudioStream(audioInputStream).read(numberOfErrorNotifications::incrementAndGet);
+      new CatGenieAudioStream(audioInputStream).read(numberOfErrorNotifications::incrementAndGet);
     }
 
     assertThat(numberOfErrorNotifications.get()).isEqualTo(2);

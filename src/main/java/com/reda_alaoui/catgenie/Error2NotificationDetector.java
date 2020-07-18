@@ -53,7 +53,7 @@ class Error2NotificationDetector implements PitchDetectionHandler {
           && audioEvent.getTimeStamp() - lastCompatiblePitchTimestamp
               <= MAX_DURATION_BETWEEN_SECOND_BEEP_START_AND_FIRST_BEEP_START_IN_SECONDS) {
         LOG.debug("Previous sequence was a valid burst\n");
-        listener.onErrorNotification();
+        fireErrorNotification();
       }
       lastSecondBeepStartTimestamp = null;
       LOG.debug("First beep start -> {}", audioEvent.getTimeStamp());
@@ -66,5 +66,13 @@ class Error2NotificationDetector implements PitchDetectionHandler {
     }
 
     lastCompatiblePitchTimestamp = audioEvent.getTimeStamp();
+  }
+
+  private void fireErrorNotification() {
+    try {
+      listener.onErrorNotification();
+    } catch (Exception e) {
+      LOG.error(e.getMessage(), e);
+    }
   }
 }
