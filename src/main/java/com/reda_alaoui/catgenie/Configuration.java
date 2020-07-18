@@ -14,13 +14,16 @@ public class Configuration {
 
   private static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
 
+  private final String audioInputNameRegex;
   private final String iftttWebhookKey;
 
   public Configuration(Properties properties) {
-    iftttWebhookKey = properties.getProperty("ifttt.webhook.key");
+    audioInputNameRegex = properties.getProperty("audio-input-name-regex");
+    iftttWebhookKey = properties.getProperty("ifttt-webhook-key");
   }
 
-  public Configuration(String iftttWebhookKey) {
+  public Configuration(String audioInputNameRegex, String iftttWebhookKey) {
+    this.audioInputNameRegex = audioInputNameRegex;
     this.iftttWebhookKey = iftttWebhookKey;
   }
 
@@ -37,6 +40,10 @@ public class Configuration {
       throw new CatGenieException(e);
     }
     return new Configuration(properties);
+  }
+
+  public String audioInputNameRegex() {
+    return audioInputNameRegex;
   }
 
   public String iftttWebhookKey() {

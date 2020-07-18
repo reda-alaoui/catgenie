@@ -5,7 +5,8 @@ public class App {
 
   public static void main(String[] args) {
     Configuration configuration = Configuration.readFromUserHome();
-    CatGenieAudioStream catGenieAudioStream = CatGenieAudioStream.openSystemAudioInput();
+    CatGenieAudioStream catGenieAudioStream =
+        CatGenieAudioStream.openAudioInput(configuration.audioInputNameRegex());
 
     Error2Webhook.run(configuration, catGenieAudioStream);
   }

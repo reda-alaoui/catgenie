@@ -1,5 +1,7 @@
 package com.reda_alaoui.catgenie;
 
+import static java.util.Objects.requireNonNull;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -12,7 +14,7 @@ public class IftttWebhookClient {
   private final String apiKey;
 
   public IftttWebhookClient(String apiKey) {
-    this.apiKey = apiKey;
+    this.apiKey = requireNonNull(apiKey);
   }
 
   public void fireEvent(String event) {
