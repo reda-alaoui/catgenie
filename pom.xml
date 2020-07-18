@@ -80,6 +80,34 @@
         <version>3.8.1</version>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.3.0</version>
+
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>com.reda_alaoui.catgenie.App</mainClass>
+            </manifest>
+          </archive>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <finalName>catgenie-${project.version}-executable</finalName>
+          <appendAssemblyId>false</appendAssemblyId>
+        </configuration>
+
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>com.cosium.code</groupId>
         <artifactId>git-code-format-maven-plugin</artifactId>
         <version>${git-code-format-maven-plugin.version}</version>
