@@ -3,6 +3,8 @@ package com.reda_alaoui.catgenie;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
+import java.util.Deque;
+import java.util.LinkedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,21 +15,15 @@ class Error2NotificationDetector implements PitchDetectionHandler {
 
   private static final float BEEP_MIN_FREQUENCY_IN_HERTZ = 2600;
 
-  private static final float MIN_DURATION_BETWEEN_BEEP_END_AND_SUBSEQUENT_BEEP_END_IN_SECONDS =
-      0.3f;
-  private static final float MAX_DURATION_BETWEEN_BEEP_END_AND_SUBSEQUENT_BEEP_END_IN_SECONDS =
-      0.6f;
+  private static final float APPROXIMATION = 0.05f;
 
-  private static final float MIN_DURATION_BURST_END_AND_SUBSEQUENT_BURST_START_IN_SECONDS = 4;
-  private static final float MAX_DURATION_BURST_END_AND_SUBSEQUENT_BURST_START_IN_SECONDS = 4.4f;
-
-  private static final float
-      MAX_DURATION_BETWEEN_SECOND_BEEP_START_AND_FIRST_BEEP_START_IN_SECONDS = 4.45f;
+  private static final float DURATION_BETWEEN_2ND_BEEP_START_AND_1ST_BEEP_START_IN_SECONDS = 4.4f;
+  private static final float DURATION_BETWEEN_1ST_BEEP_START_AND_2ND_BEEP_START_IN_SECONDS = 0.6f;
+  private static final float BEEP_DURATION = 0.4f;
 
   private final Error2Listener listener;
 
-  private Double lastCompatiblePitchTimestamp;
-  private Double lastSecondBeepStartTimestamp;
+  private final Deque<Double> beepStartHistory = new LinkedList<>();
 
   Error2NotificationDetector(Error2Listener listener) {
     this.listener = listener;
@@ -39,33 +35,75 @@ class Error2NotificationDetector implements PitchDetectionHandler {
       return;
     }
 
-    double elapsedTimeSinceLastPitch;
-    if (lastCompatiblePitchTimestamp == null) {
-      elapsedTimeSinceLastPitch = MIN_DURATION_BURST_END_AND_SUBSEQUENT_BURST_START_IN_SECONDS;
-    } else {
-      elapsedTimeSinceLastPitch = audioEvent.getTimeStamp() - lastCompatiblePitchTimestamp;
+    if (beepStartHistory.isEmpty()) {
+      recordBeep(audioEvent);
+      return;
     }
 
-    if (MIN_DURATION_BURST_END_AND_SUBSEQUENT_BURST_START_IN_SECONDS <= elapsedTimeSinceLastPitch
-        && elapsedTimeSinceLastPitch
-            <= MAX_DURATION_BURST_END_AND_SUBSEQUENT_BURST_START_IN_SECONDS) {
-      if (lastSecondBeepStartTimestamp != null
-          && audioEvent.getTimeStamp() - lastCompatiblePitchTimestamp
-              <= MAX_DURATION_BETWEEN_SECOND_BEEP_START_AND_FIRST_BEEP_START_IN_SECONDS) {
-        LOG.debug("Previous sequence was a valid burst\n");
-        fireErrorNotification();
-      }
-      lastSecondBeepStartTimestamp = null;
-      LOG.debug("First beep start -> {}", audioEvent.getTimeStamp());
-    } else if (MIN_DURATION_BETWEEN_BEEP_END_AND_SUBSEQUENT_BEEP_END_IN_SECONDS
-            <= elapsedTimeSinceLastPitch
-        && elapsedTimeSinceLastPitch
-            <= MAX_DURATION_BETWEEN_BEEP_END_AND_SUBSEQUENT_BEEP_END_IN_SECONDS) {
-      lastSecondBeepStartTimestamp = audioEvent.getTimeStamp();
-      LOG.debug("Second beep start -> {}\n", audioEvent.getTimeStamp());
+    if (audioEvent.getTimeStamp() - beepStartHistory.getLast()
+        <= BEEP_DURATION * (1 + APPROXIMATION)) {
+      // Same beep as the previous
+      return;
     }
 
-    lastCompatiblePitchTimestamp = audioEvent.getTimeStamp();
+    recordBeep(audioEvent);
+
+    if (beepStartHistory.size() != 3) {
+      return;
+    }
+
+    double firstBeepStart = beepStartHistory.removeFirst();
+    double secondBeepStart = beepStartHistory.removeFirst();
+    double thirdBeepStart = beepStartHistory.getFirst();
+
+    if (isBeepBeepPauseBeep(firstBeepStart, secondBeepStart, thirdBeepStart)) {
+      LOG.debug(
+          "Matched pattern 'Beep Beep Pause Beep' on '{} {} {}'",
+          firstBeepStart,
+          secondBeepStart,
+          thirdBeepStart);
+      fireErrorNotification();
+    } else if (isBeepPauseBeepBeep(firstBeepStart, secondBeepStart, thirdBeepStart)) {
+      LOG.debug(
+          "Matched pattern 'Beep Pause Beep Beep' on '{} {} {}'",
+          firstBeepStart,
+          secondBeepStart,
+          thirdBeepStart);
+      fireErrorNotification();
+    }
+  }
+
+  private void recordBeep(AudioEvent audioEvent) {
+    LOG.debug("Beep at {}", audioEvent.getTimeStamp());
+    beepStartHistory.add(audioEvent.getTimeStamp());
+  }
+
+  private boolean isBeepBeepPauseBeep(
+      double firstBeepStart, double secondBeepStart, double thirdBeepStart) {
+    return isBeepBeep(firstBeepStart, secondBeepStart)
+        && isBeepPauseBeep(secondBeepStart, thirdBeepStart);
+  }
+
+  private boolean isBeepPauseBeepBeep(
+      double firstBeepStart, double secondBeepStart, double thirdBeepStart) {
+    return isBeepPauseBeep(firstBeepStart, secondBeepStart)
+        && isBeepBeep(secondBeepStart, thirdBeepStart);
+  }
+
+  private boolean isBeepBeep(double firstBeepStart, double secondBeepStart) {
+    double firstToSecondDuration = secondBeepStart - firstBeepStart;
+    return DURATION_BETWEEN_1ST_BEEP_START_AND_2ND_BEEP_START_IN_SECONDS * (1 - APPROXIMATION)
+            <= firstToSecondDuration
+        && firstToSecondDuration
+            <= DURATION_BETWEEN_1ST_BEEP_START_AND_2ND_BEEP_START_IN_SECONDS * (1 + APPROXIMATION);
+  }
+
+  private boolean isBeepPauseBeep(double firstBeepStart, double secondBeepStart) {
+    double firstToSecondDuration = secondBeepStart - firstBeepStart;
+    return DURATION_BETWEEN_2ND_BEEP_START_AND_1ST_BEEP_START_IN_SECONDS * (1 - APPROXIMATION)
+            <= firstToSecondDuration
+        && firstToSecondDuration
+            <= DURATION_BETWEEN_2ND_BEEP_START_AND_1ST_BEEP_START_IN_SECONDS * (1 + APPROXIMATION);
   }
 
   private void fireErrorNotification() {
