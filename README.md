@@ -13,8 +13,8 @@ to your CatGenie.
 My CatGenie is dysfunctionnal. On each cleaning cycle, it fails 3 times with code 2 error. I think its solenoid valve 
 is dead. Each time the code 2 error occurs, the CatGenie pauses the cycle
 and loudly beeps until you fix the issue. In my case, until the valve is changed, I just have to push the start/pause 
-button for 7 seconds to resume the cycle. I have to that 2 or 3 times per cycle. It can happen at night or when I am out 
-of the house.
+button for 7 seconds to resume the cycle. I have to repeat that 2 or 3 times per cycle. It can happen at night or when 
+I am out of the house.
 
 I wanted to automate the push button action. So I ordered a [SwitchBot](https://www.switch-bot.com/bot). 
 A [SwitchBot](https://www.switch-bot.com/bot) is just a remote button pusher. I discovered it was 
