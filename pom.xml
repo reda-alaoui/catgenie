@@ -21,11 +21,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.github.jorensix</groupId>
-      <artifactId>tarsos-dsp</artifactId>
-      <version>d958352</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/tarsos-dsp-d958352.jar</systemPath>
+      <groupId>com.github.axet</groupId>
+      <artifactId>TarsosDSP</artifactId>
+      <version>2.4-1</version>
     </dependency>
 
     <dependency>
