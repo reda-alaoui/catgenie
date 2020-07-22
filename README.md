@@ -27,6 +27,7 @@ I created an [IFTTT](https://ifttt.com/) applet which, on *catgenie_error_2* web
 [SwitchBot](https://www.switch-bot.com/bot) to press the *start/pause* button for 7 seconds.
 
 The result in action:
+
 [![Alt text](https://img.youtube.com/vi/m6DJ4pzsdfM/0.jpg)](https://youtu.be/m6DJ4pzsdfM)
 
 Now I can sleep.
