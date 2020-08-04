@@ -26,6 +26,10 @@ This application acts as an [IFTTT](https://ifttt.com/) trigger.
 I created an [IFTTT](https://ifttt.com/) applet which, on *catgenie_error_2* webhook event, orders the 
 [SwitchBot](https://www.switch-bot.com/bot) to press the *start/pause* button for 7 seconds.
 
+The Raspberry Pi running the application:
+
+![Raspberry Pi installation](doc/raspberry-installation.jpg)
+
 The result in action (click on the picture to watch the video):
 
 [![Alt text](https://img.youtube.com/vi/m6DJ4pzsdfM/0.jpg)](https://youtu.be/m6DJ4pzsdfM)
