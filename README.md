@@ -34,7 +34,7 @@ The [SwitchBot](https://www.switch-bot.com/bot) installation:
 
 ![SwitchBot installation](doc/switchbot-installation.jpg)
 
-The result in action (click the picture below to watch the video):
+The result in action (click on the picture below to watch the video):
 
 [![Alt text](https://img.youtube.com/vi/m6DJ4pzsdfM/0.jpg)](https://youtu.be/m6DJ4pzsdfM)
 
