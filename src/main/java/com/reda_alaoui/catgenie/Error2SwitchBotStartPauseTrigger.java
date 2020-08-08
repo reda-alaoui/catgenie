@@ -10,13 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /** @author Réda Housni Alaoui */
-public class SwitchBotStartPauseError2Trigger implements Error2Listener {
+public class Error2SwitchBotStartPauseTrigger implements Error2Listener {
 
-  private static final Logger LOG = LoggerFactory.getLogger(SwitchBotStartPauseError2Trigger.class);
+  private static final Logger LOG = LoggerFactory.getLogger(Error2SwitchBotStartPauseTrigger.class);
 
   private final String bluetoothMacAddress;
 
-  public SwitchBotStartPauseError2Trigger(String bluetoothMacAddress) {
+  public Error2SwitchBotStartPauseTrigger(String bluetoothMacAddress) {
     this.bluetoothMacAddress = requireNonNull(bluetoothMacAddress);
   }
 
@@ -71,10 +71,6 @@ public class SwitchBotStartPauseError2Trigger implements Error2Listener {
               + "'");
     }
 
-    LOG.debug(output);
-  }
-
-  public static void main(String[] args) throws IOException, InterruptedException {
-    new SwitchBotStartPauseError2Trigger("E7:88:88:46:D3:F3").pressButton();
+    LOG.info("Command successfully executed with output '{}'", output);
   }
 }

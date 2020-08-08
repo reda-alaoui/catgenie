@@ -30,13 +30,13 @@ public class App {
         configuration.switchBotStartPauseBluetoothMacAddress();
     if (StringUtils.isNotBlank(switchBotStartPauseBluetoothMacAddress)) {
       LOG.info(
-          "Registering SwitchBot Start/Pause error 2 trigger for bluetooth mac address {}",
+          "Registering error 2 SwitchBot Start/Pause trigger for bluetooth mac address {}",
           switchBotStartPauseBluetoothMacAddress);
       error2Listeners.add(
-          new SwitchBotStartPauseError2Trigger(switchBotStartPauseBluetoothMacAddress));
+          new Error2SwitchBotStartPauseTrigger(switchBotStartPauseBluetoothMacAddress));
     } else {
       LOG.info(
-          "No SwitchBot Start/Pause bluetooth mac address found. Skipping SwitchBot Start/Pause error 2 trigger registration.");
+          "No SwitchBot Start/Pause bluetooth mac address found. Skipping error 2 SwitchBot Start/Pause trigger registration.");
     }
 
     catGenieAudioStream.read(new CompositeError2Listener(error2Listeners));
