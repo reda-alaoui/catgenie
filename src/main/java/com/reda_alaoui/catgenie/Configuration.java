@@ -16,15 +16,22 @@ public class Configuration {
 
   private final String audioInputNameRegex;
   private final String iftttWebhookKey;
+  private final String switchBotStartPauseBluetoothMacAddress;
 
   public Configuration(Properties properties) {
     audioInputNameRegex = properties.getProperty("audio-input-name-regex");
     iftttWebhookKey = properties.getProperty("ifttt-webhook-key");
+    switchBotStartPauseBluetoothMacAddress =
+        properties.getProperty("switch-bot-bluetooth-mac-address");
   }
 
-  public Configuration(String audioInputNameRegex, String iftttWebhookKey) {
+  public Configuration(
+      String audioInputNameRegex,
+      String iftttWebhookKey,
+      String switchBotStartPauseBluetoothMacAddress) {
     this.audioInputNameRegex = audioInputNameRegex;
     this.iftttWebhookKey = iftttWebhookKey;
+    this.switchBotStartPauseBluetoothMacAddress = switchBotStartPauseBluetoothMacAddress;
   }
 
   public static Configuration readFromUserHome() {
@@ -48,5 +55,9 @@ public class Configuration {
 
   public String iftttWebhookKey() {
     return iftttWebhookKey;
+  }
+
+  public String switchBotStartPauseBluetoothMacAddress() {
+    return switchBotStartPauseBluetoothMacAddress;
   }
 }
