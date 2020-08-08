@@ -58,11 +58,18 @@ Until there is no more beep sound, the event will be fired at a rate of at most 
 Configuration is read from `~/.catgenie/configuration.properties`. You must create the file yourself.
 
 ```properties
+# Required
 # The regex that the monitored Audio Input name will have to match
 # In this example, we are looking for the Logitech C920 Audio Input
 audio-input-name-regex=.*C920.*
+# Optional
 # The secret key provided by https://ifttt.com/maker_webhooks
 ifttt-webhook-key=secret
+# Optional
+# The switch bot bluetooth mac address if you want the application to control directly the bot
+# instead of letting IFTTT control deal with it. Useful when you don't want to rely on an internet
+# connection or IFTTT/SwitchBot servers.
+switch-bot-bluetooth-mac-address=E7:88:88:46:D3:F3
 ```
 
 ## How to retrieve Maker Webhooks secret key?
@@ -83,4 +90,5 @@ You can play [catgenie_error_2.wav](src/test/resources/catgenie_error_2.wav) to 
 
 This app has been tested using:
 - a Logitech C920 as audio input 
+- a Raspberry Pi 3 running Raspbian
 - a CatGenie 120
