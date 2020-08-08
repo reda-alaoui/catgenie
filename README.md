@@ -67,7 +67,7 @@ audio-input-name-regex=.*C920.*
 ifttt-webhook-key=secret
 # Optional
 # The switch bot bluetooth mac address if you want the application to control directly the bot
-# instead of letting IFTTT control deal with it. Useful when you don't want to rely on an internet
+# instead of letting IFTTT deal with it. Useful when you don't want to rely on an internet
 # connection or IFTTT/SwitchBot servers.
 switch-bot-bluetooth-mac-address=E7:88:88:46:D3:F3
 ```
