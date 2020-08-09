@@ -1,8 +1,5 @@
 package com.reda_alaoui.catgenie;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,12 +8,9 @@ public class Error2IftttWebhook implements Error2Listener {
 
   private static final Logger LOG = LoggerFactory.getLogger(Error2IftttWebhook.class);
 
-  private static final Duration MIN_DURATION_BETWEEN_TWO_NOTIFICATIONS =
-      Duration.of(2, ChronoUnit.MINUTES);
+  private static final String EVENT_NAME = "catgenie_error_2";
 
   private final IftttWebhookClient client;
-
-  private LocalDateTime lastNotification;
 
   public Error2IftttWebhook(String iftttWebhookKey) {
     this.client = new IftttWebhookClient(iftttWebhookKey);
@@ -24,15 +18,8 @@ public class Error2IftttWebhook implements Error2Listener {
 
   @Override
   public void onErrorNotification() {
-    if (lastNotification != null
-        && lastNotification
-            .plus(MIN_DURATION_BETWEEN_TWO_NOTIFICATIONS)
-            .isAfter(LocalDateTime.now())) {
-      return;
-    }
-    lastNotification = LocalDateTime.now();
-    LOG.info("Firing error 2 notification");
-    client.fireEvent("catgenie_error_2");
-    LOG.info("Error 2 notification fired with success");
+    LOG.info("Firing IFTTT event '{}'", EVENT_NAME);
+    client.fireEvent(EVENT_NAME);
+    LOG.info("IFTTT event '{}' fired with success", EVENT_NAME);
   }
 }

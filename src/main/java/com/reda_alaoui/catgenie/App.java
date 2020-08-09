@@ -1,5 +1,7 @@
 package com.reda_alaoui.catgenie;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +41,8 @@ public class App {
           "No SwitchBot Start/Pause bluetooth mac address found. Skipping error 2 SwitchBot Start/Pause trigger registration.");
     }
 
-    catGenieAudioStream.read(new CompositeError2Listener(error2Listeners));
+    catGenieAudioStream.read(
+        new Error2DelayingListener(
+            new CompositeError2Listener(error2Listeners), Duration.of(2, ChronoUnit.MINUTES)));
   }
 }
